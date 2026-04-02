@@ -3,15 +3,24 @@ import json
 import os
 from PIL import Image
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
-api_key = os.getenv("GOOGLE_API_KEY")
 
-# Simple, stable configuration
+# Check Streamlit secrets first, then environment variables
+try:
+    api_key = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+except Exception:
+    api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    st.error("API Key not found. Please check your Secrets or .env file.")
+    st.stop()
+
 genai.configure(api_key=api_key)
 
-# Use the production-ready model string (Upgraded from 1.5 because 1.5 gives a 404 API Error)
-model = genai.GenerativeModel('gemini-2.5-flash')
+# Initialize model explicitly with the key if possible
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 def analyze_reports(inspection_text, thermal_text, image_paths, api_key):
     """
