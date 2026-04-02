@@ -1,19 +1,23 @@
-# AI-Powered Detailed Diagnostic Report (DDR) Generator
+ AI-Powered Detailed Diagnostic Report (DDR) Generator
+An intelligent building inspection tool that synthesizes visual reports and thermal data to identify hidden structural risks. Built for the Urbanroof Internship Task.
 
-An advanced full-stack application designed to automate the synthesis of property inspection data. This system ingests separate **Visual Inspection** and **Infrared Thermal** PDF reports, leverages **Gemini 1.5 Flash** to identify data conflicts and hidden issues, and generates a professional, consolidated **Detailed Diagnostic Report (DDR)**.
+The Problem & Solution
+Property inspections often produce "siloed" data. A visual inspector might miss what a thermal camera sees. This app acts as a Digital Foreman, reading both data streams simultaneously to find contradictions—like a "dry" roof that actually has subsurface moisture.
 
-## Key Features
+🛠️ Tech Stack
+Frontend: Streamlit (Cloud-native deployment)
 
-* **Multimodal Data Extraction:** Automatically extracts text and embedded thermal images from PDF documents using `PyMuPDF`.
-* **Intelligent Synthesis:** Uses LLM logic to compare visual observations against thermal data (e.g., detecting sub-surface moisture where a visual check saw "no issues").
-* **Automated PDF Generation:** Programmatically builds a structured, high-quality DDR including mapped images, severity assessments, and root cause analysis.
-* **Modern Web UI:** A clean, dark-themed Streamlit interface for seamless file uploads and report processing.
+AI Engine: Llama 3.1 8B Instant via Groq LPU (Optimized for low latency)
 
-## Tech Stack
+PDF Processing: PyMuPDF (MuPDF) for high-fidelity text and image extraction
 
-* **Language:** Python 3.9+
-* **AI Model:** Google Gemini 1.5 Flash
-* **Frontend:** Streamlit
-* **PDF Processing:** PyMuPDF (fitz) & ReportLab
-* **Environment Management:** Python-dotenv
+Report Generation: ReportLab for automated PDF professional formatting
 
+ Key Features
+Multimodal Analysis: Processes both textual observations and thermal heat-map images.
+
+Conflict Detection: Specifically engineered to highlight discrepancies between visual and thermal data.
+
+Secure Infrastructure: Implements Streamlit Secrets for encrypted API key management (no hardcoded keys).
+
+High Performance: Powered by Groq's LPU architecture for near-instant report generation.
