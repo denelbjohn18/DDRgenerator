@@ -1,10 +1,10 @@
- AI-Powered Detailed Diagnostic Report (DDR) Generator
+AI-Powered Detailed Diagnostic Report (DDR) Generator
 An intelligent building inspection tool that synthesizes visual reports and thermal data to identify hidden structural risks. Built for the Urbanroof Internship Task.
 
-The Problem & Solution
+ The Problem & Solution
 Property inspections often produce "siloed" data. A visual inspector might miss what a thermal camera sees. This app acts as a Digital Foreman, reading both data streams simultaneously to find contradictions—like a "dry" roof that actually has subsurface moisture.
 
-🛠️ Tech Stack
+ Tech Stack
 Frontend: Streamlit (Cloud-native deployment)
 
 AI Engine: Llama 3.1 8B Instant via Groq LPU (Optimized for low latency)
