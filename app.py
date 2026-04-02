@@ -14,10 +14,10 @@ load_dotenv(dotenv_path=env_path, override=True)
 
 st.set_page_config(page_title="AI-POWERED DDR GENERATOR", layout="wide")
 
-api_key = os.getenv("GOOGLE_API_KEY")
+api_key = os.getenv("GROQ_API_KEY", "").replace('"', '').strip()
 
 if not api_key:
-    st.error("API Key missing! Please ensure GOOGLE_API_KEY is set in your .env file.")
+    st.error("API Key missing! Please ensure GROQ_API_KEY is set in your .env file.")
     st.stop()
 
 st.sidebar.header("Upload Reports")
@@ -46,7 +46,7 @@ if st.button("Process Reports"):
             
             all_images = insp_images + therm_images
             
-        with st.spinner("Analyzing data with Generative AI... this may take some time."):
+        with st.spinner("Analyzing data with Groq AI... this may take some time."):
             try:
                 result = analyze_reports(insp_text, therm_text, all_images, api_key)
                 st.session_state.json_result = result
