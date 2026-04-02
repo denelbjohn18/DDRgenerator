@@ -1,0 +1,95 @@
+import google.generativeai as genai
+import json
+import os
+from PIL import Image
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("GOOGLE_API_KEY")
+
+# Simple, stable configuration
+genai.configure(api_key=api_key)
+
+# Use the production-ready model string (Upgraded from 1.5 because 1.5 gives a 404 API Error)
+model = genai.GenerativeModel('gemini-2.5-flash')
+
+def analyze_reports(inspection_text, thermal_text, image_paths, api_key):
+    """
+    Sends extracted data to Gemini to generate structured JSON.
+    """
+    # Enforce JSON output during generation
+    generation_config = {
+        "response_mime_type": "application/json",
+        "temperature": 0.2,
+    }
+    
+    prompt = f"""
+    You are a Senior AI Application Engineer acting as an expert Diagnostic Report Analyst.
+    You are provided with text extracted from two reports:
+    1. Inspection Report
+    2. Thermal Report
+    
+    You are also provided with a set of images extracted from these reports.
+    
+    Your task is to merge the data from both reports logically into a clear, professional Detailed Diagnostic Report (DDR).
+    
+    **CRITICAL BUSINESS RULES:**
+    - Merge data from both reports logically.
+    - Do NOT invent facts; use "Not Available" if information is missing.
+    - Explicitly mention any conflicts between the Inspection and Thermal data (e.g., if one says an issue exists and the other says it doesn't).
+    - Use simple, client-friendly language. Avoid unnecessary technical jargon.
+    - Below, you will see a list of provided images with their paths. You MUST assign the `Image_Path` to each observation that matches the most relevant image based on the context of the image and the observation. 
+    - If no image securely matches the observation, set `Image_Path` to `null`.
+    
+    Here is the schema your JSON response MUST strictly follow:
+    {{
+      "Property_Issue_Summary": "string",
+      "Area_wise_Observations": [
+        {{
+          "Area": "string",
+          "Observation": "string",
+          "Image_Path": "string or null"
+        }}
+      ],
+      "Probable_Root_Cause": "string",
+      "Severity_Assessment": {{
+        "Level": "Low/Medium/High/Critical",
+        "Reasoning": "string"
+      }},
+      "Recommended_Actions": ["string", "string"],
+      "Additional_Notes": "string",
+      "Missing_or_Unclear_Information": "string"
+    }}
+    
+    ### DATA INPUT ###
+    **INSPECTION REPORT TEXT:**
+    {inspection_text}
+    
+    **THERMAL REPORT TEXT:**
+    {thermal_text}
+    
+    **IMAGES AVAILABLE:**
+    {', '.join(image_paths)}
+    """
+    
+    # We construct the multimodal content block
+    content = [prompt]
+    
+    # Add image objects directly
+    for img_path in image_paths:
+        try:
+            img = Image.open(img_path)
+            # Add context for the model so it knows the identifier of the image
+            content.append(f"Image associated with path: {img_path}")
+            content.append(img)
+        except Exception as e:
+            print(f"Skipping generation for image {img_path}: {e}")
+            
+    response = model.generate_content(content, generation_config=generation_config)
+    
+    # Clean possible markdown wrap from the response, strictly parse JSON
+    try:
+        response_text = response.text.replace("```json", "").replace("```", "")
+        return json.loads(response_text)
+    except json.JSONDecodeError as e:
+        raise Exception(f"Failed to parse Gemini response as JSON: {e}\nRaw Response: {response.text}")
