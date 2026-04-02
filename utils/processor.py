@@ -9,7 +9,7 @@ import streamlit as st
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 # 3. Initialize the model using the stable production string
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 def analyze_reports(inspection_text, thermal_text, image_paths, api_key):
     """
