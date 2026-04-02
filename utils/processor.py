@@ -4,14 +4,16 @@ from PIL import Image
 import google.generativeai as genai
 import streamlit as st
 
-# 1. Explicitly pull the key from Streamlit Secrets
-# 2. Configure WITHOUT any api_version or ClientOptions
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-
-# 3. Initialize the model using the stable production string
-model = genai.GenerativeModel('gemini-1.5-flash-latest')
-
 def analyze_reports(inspection_text, thermal_text, image_paths, api_key):
+    # Try fetching from secrets if the passed api_key is somehow empty
+    if not api_key and "GOOGLE_API_KEY" in st.secrets:
+        api_key = st.secrets["GOOGLE_API_KEY"]
+        
+    # Configure securely inside the localized call
+    genai.configure(api_key=api_key)
+    
+    # Instantiate the stable model instance bound to this configured key 
+    model = genai.GenerativeModel('gemini-1.5-flash')
     """
     Sends extracted data to Gemini to generate structured JSON.
     """
