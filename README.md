@@ -1,32 +1,19 @@
-# AI-Powered DDR Generator
+# AI-Powered Detailed Diagnostic Report (DDR) Generator
 
-A full-stack application that ingests Inspection and Thermal report PDFs, leverages Gemini 1.5 Flash to intelligently extract and merge details (including images), and generates a professional Detailed Diagnostic Report (DDR) as a downloadable PDF.
+An advanced full-stack application designed to automate the synthesis of property inspection data. This system ingests separate **Visual Inspection** and **Infrared Thermal** PDF reports, leverages **Gemini 1.5 Flash** to identify data conflicts and hidden issues, and generates a professional, consolidated **Detailed Diagnostic Report (DDR)**.
 
-## Setup Instructions
+## 🚀 Key Features
 
-1. **Clone and Enter Directory**
-   \`\`\`bash
-   git clone <your-repository-url>
-   cd DDRgenerator
-   \`\`\`
+* **Multimodal Data Extraction:** Automatically extracts text and embedded thermal images from PDF documents using `PyMuPDF`.
+* **Intelligent Synthesis:** Uses LLM logic to compare visual observations against thermal data (e.g., detecting sub-surface moisture where a visual check saw "no issues").
+* **Automated PDF Generation:** Programmatically builds a structured, high-quality DDR including mapped images, severity assessments, and root cause analysis.
+* **Modern Web UI:** A clean, dark-themed Streamlit interface for seamless file uploads and report processing.
 
-2. **Setup Virtual Environment (Recommended)**
-   \`\`\`bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   \`\`\`
+## 🛠️ Tech Stack
 
-3. **Install Dependencies**
-   \`\`\`bash
-   pip install -r requirements.txt
-   \`\`\`
+* **Language:** Python 3.9+
+* **AI Model:** Google Gemini 1.5 Flash
+* **Frontend:** Streamlit
+* **PDF Processing:** PyMuPDF (fitz) & ReportLab
+* **Environment Management:** Python-dotenv
 
-4. **Environment Variables**
-   - Open the `.env` file.
-   - Insert your Google API Key: `GOOGLE_API_KEY="your_api_key_here"`
-
-5. **Run the Application**
-   \`\`\`bash
-   streamlit run app.py
-   \`\`\`
-# DDRgenerator
